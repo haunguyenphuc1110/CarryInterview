@@ -1,38 +1,60 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { Book, BookVerse } from 'models/Book'
 
-const initialState: any = {
+export type BookVerseState = {
+  isLoading: boolean
+  isSuccess: boolean
+  error: any
+  book: BookVerse | null
+  bookHighlight: Book[]
+}
+
+const initialBookVerseState: BookVerseState = {
   isLoading: false,
   isSuccess: false,
   error: null,
-  config: null,
-  info: null,
+  book: null,
+  bookHighlight: [],
 }
 
 const verseSlice = createSlice({
-  name: 'verse',
-  initialState,
+  name: 'bookVerse',
+  initialState: initialBookVerseState,
   reducers: {
     startFetch: state => {
       state.isLoading = true
       state.isSuccess = false
       state.error = null
+      state.book = null
+      state.bookHighlight = []
     },
-    getVerseSuccess: (state, action) => {
+    getBookVerseSuccess: (state, action) => {
       state.isLoading = false
       state.isSuccess = true
-      state.verse = action.payload
+      state.book = action.payload
+      state.error = null
+    },
+    saveHighlightVerse: (state, action) => {
+      state.isLoading = false
+      state.isSuccess = true
+      state.bookHighlight = action.payload
       state.error = null
     },
     fetchFail: (state, action) => {
       state.isLoading = false
       state.isSuccess = false
       state.error = action.payload
-      state.config = null
-      state.info = null
+      state.book = null
+      state.bookHighlight = []
     },
   },
 })
 
-export const { startFetch, getVerseSuccess, fetchFail } = verseSlice.actions
+export const {
+  startFetch,
+  getBookVerseSuccess,
+  saveHighlightVerse,
+  fetchFail,
+} = verseSlice.actions
 
 export default verseSlice.reducer

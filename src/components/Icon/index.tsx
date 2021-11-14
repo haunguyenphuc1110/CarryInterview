@@ -1,6 +1,6 @@
-import React from 'react'
 import FontAwesome from 'react-native-vector-icons/FontAwesome5'
 import { IconProps } from 'react-native-vector-icons/Icon'
+import React from 'react'
 
 interface Props extends IconProps {
   icomoon?: boolean

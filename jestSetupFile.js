@@ -1,13 +1,13 @@
 import 'jsdom-global/register'
 
-import Adapter from 'enzyme-adapter-react-16'
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17'
 import Enzyme from 'enzyme'
 
 /**
  * Set up Enzyme to mount to DOM, simulate events,
  * and inspect the DOM in tests.
  */
-Enzyme.configure({adapter: new Adapter()})
+Enzyme.configure({ adapter: new Adapter() })
 
 jest.useFakeTimers()
 
@@ -23,6 +23,8 @@ jest
   }))
   .mock('react-native-vector-icons', () => {
     return {
-      RNVectorIconsManager : jest.mock(),
-      createIconSetFromIcoMoon:jest.fn()
-    }});
+      RNVectorIconsManager: jest.mock(),
+      createIconSetFromIcoMoon: jest.fn()
+    }
+  })
+  .mock('react-native-modal');

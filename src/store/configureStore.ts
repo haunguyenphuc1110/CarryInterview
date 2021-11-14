@@ -9,6 +9,7 @@ import rootReducers from './reducers'
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
+  whitelist: ['bookVerse'],
   timeout: null,
 } as any
 
