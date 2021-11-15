@@ -6,4 +6,5 @@ export default {
   search_book: 'Search book',
   book_not_found: 'Book not found',
   verse_detail: 'Verse detail',
+  book_of_the_day: 'Book of the Day',
 }

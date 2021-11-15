@@ -3,17 +3,11 @@ import Loading from 'components/Loading'
 import colors from 'constants/colors'
 import { Book } from 'models/Book'
 import { RootStackParamList } from 'models/Navigation'
-import React, { useCallback, useEffect, useState } from 'react'
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native'
+import React, { useCallback, useEffect } from 'react'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import Selector from 'store/Selector'
-import { SPACING_24, wScale } from 'styles/dimensions'
+import { SPACING_24 } from 'styles/dimensions'
 import { FontSize } from 'styles/themes'
 import { getBookVerse } from '../action/verseAction'
 import { saveHighlightVerse } from '../action/verseReducer'
@@ -27,8 +21,6 @@ const VerseDetailScreen = ({
 
   const { book, bookHighlight, isLoading } = useSelector(Selector.bookVerse)
 
-  console.log('bookHighlight', bookHighlight)
-
   useEffect(() => {
     if (chosenBook) {
       navigation.setOptions({ title: chosenBook.name })
@@ -36,14 +28,24 @@ const VerseDetailScreen = ({
     }
   }, [chosenBook])
 
+  const onRenderHighlightString = (value: string) =>
+    value
+      .trim()
+      .split(' ')
+      .map((word, index) => (
+        <Text
+          key={word + index}
+          style={[styles.highlight, index === 0 && styles.verse]}>
+          {word}{' '}
+        </Text>
+      ))
+
   const onHighlight = useCallback(
     (verse: Book) => {
       const foundVerse =
         (bookHighlight || []).findIndex(
           book => book.verse === verse.verse && book.book_id === verse.book_id,
         ) > -1
-
-      console.log('foundVerse', foundVerse)
 
       if (foundVerse) {
         const filteredVerse = (bookHighlight || []).filter(
@@ -65,17 +67,31 @@ const VerseDetailScreen = ({
       contentContainerStyle={styles.contentContainer}>
       {book?.verses.map((verse: Book) => {
         const isHighlight = !!(bookHighlight || []).find(
-          (book: Book) => book.text === verse?.text,
+          (book: Book) =>
+            book.text === verse?.text && book.book_id === verse.book_id,
         )
 
         return (
-          <TouchableWithoutFeedback
-            key={verse.verse}
-            onPress={() => onHighlight(verse)}>
-            <View style={isHighlight && { backgroundColor: colors.yellow }}>
-              <Text style={styles.content}>{verse?.text}</Text>
-            </View>
-          </TouchableWithoutFeedback>
+          <View key={verse.text}>
+            {isHighlight ? (
+              <Text
+                key={verse.text}
+                style={styles.content}
+                onPress={() => onHighlight(verse)}
+                suppressHighlighting={true}>
+                {onRenderHighlightString(`${verse.verse} ${verse.text}`)}
+              </Text>
+            ) : (
+              <Text
+                key={verse.text}
+                style={styles.content}
+                onPress={() => onHighlight(verse)}
+                suppressHighlighting={true}>
+                <Text style={styles.verse}>{`${verse.verse}`}</Text>{' '}
+                {verse.text.trim()}
+              </Text>
+            )}
+          </View>
         )
       })}
     </ScrollView>
@@ -92,10 +108,17 @@ const styles = StyleSheet.create({
     paddingBottom: SPACING_24 * 2,
   },
   content: {
-    marginBottom: wScale(2),
     fontSize: FontSize.massive,
     textAlign: 'justify',
     lineHeight: SPACING_24,
+    marginBottom: SPACING_24 / 2,
+  },
+  verse: {
+    fontSize: FontSize.tiny,
+    color: colors.gray,
+  },
+  highlight: {
+    backgroundColor: colors.yellow,
   },
 })
 

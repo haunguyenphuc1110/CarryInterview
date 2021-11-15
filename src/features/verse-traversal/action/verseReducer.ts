@@ -26,7 +26,6 @@ const verseSlice = createSlice({
       state.isSuccess = false
       state.error = null
       state.book = null
-      state.bookHighlight = []
     },
     getBookVerseSuccess: (state, action) => {
       state.isLoading = false
@@ -45,7 +44,6 @@ const verseSlice = createSlice({
       state.isSuccess = false
       state.error = action.payload
       state.book = null
-      state.bookHighlight = []
     },
   },
 })
