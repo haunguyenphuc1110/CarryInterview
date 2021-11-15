@@ -38,22 +38,27 @@ const VerseFavoriteScreen = () => {
           key={book.text + book.verse}
           style={styles.bookContainer}
           onPress={() => onSelectVerse(book)}>
-          <Image
-            source={images.BOOK_COVER}
-            resizeMode="stretch"
-            style={styles.cover}
-          />
-          <View style={{ marginLeft: SPACING / 2 }}>
-            <Text style={styles.name}>
-              {book.book_name}{' '}
-              <Text
-                style={
-                  styles.description
-                }>{`(${book.chapter} - ${book.verse})`}</Text>
-            </Text>
-            <Text style={styles.verse} numberOfLines={2}>
-              {book.text}
-            </Text>
+          <View style={styles.row}>
+            <Image
+              source={images.BOOK_COVER}
+              resizeMode="stretch"
+              style={styles.cover}
+            />
+            <View
+              style={{
+                marginLeft: SPACING / 2,
+              }}>
+              <Text style={styles.name}>
+                {book.book_name}{' '}
+                <Text
+                  style={
+                    styles.description
+                  }>{`(${book.chapter} - ${book.verse})`}</Text>
+              </Text>
+              <Text style={styles.verse} numberOfLines={2}>
+                {book.text.trim()}
+              </Text>
+            </View>
           </View>
 
           <Image
@@ -72,14 +77,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
   },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
   name: {
     fontSize: FontSize.regular,
     fontWeight: '700',
-    marginTop: SPACING_24 / 2,
+    marginTop: SPACING_24 / 4,
   },
   verse: {
     maxWidth: SCREEN_WIDTH / 2,
-    marginTop: SPACING_24 / 4,
+    marginTop: wScale(4),
   },
   description: {
     fontSize: FontSize.small,
@@ -87,6 +96,7 @@ const styles = StyleSheet.create({
   },
   bookContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'flex-start',
     margin: SPACING_24,
     borderRadius: wScale(8),
